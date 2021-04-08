@@ -30,14 +30,18 @@ var apparitionDeTouches = 0;
 // true dans les débuts car c'est Simon qui commence à jouer
 var leTourDeSimon = true;
 
+// Variables reliées au messages si nous passons un niveau ou ratons
+var bon = document.querySelector("p.bravo");
+var mauvais = document.querySelector("p.dommage")
+
 // Toutes les bandes son du jeu
 var sonToucheRose = new Audio('son/touchenoir.mp3');
 var sonToucheBleu = new Audio('son/touchebleu.mp3');
 var sonToucheJaune = new Audio('son/touchejaune.mp3');
 var sonToucheViolet = new Audio('son/toucheviolet.mp3');
 var sonDebutJeu = new Audio('son/Wontolla-LaserPointer.mp3');
-var good = new Audio('son/good.mp3')
-var rate = new Audio('son/rate.mp3')
+var good = new Audio('son/Yoohoo.mp3')
+var rate = new Audio('son/wrong long grave.mp3')
 
 
 // Function qui sert à netoyer toute les variables, listes et boléens du jeu
@@ -116,11 +120,11 @@ function jugeDeNiveau() {
 // Cette fonction ajoute un effet sur chaque touche apelé par la liste ordreDePassage
 //Cquage animations se déroule l'une après l'autre grâce à setTimeout
 function musique (ordreDePassage) {
-console.log("NIVEAU : ", niveau)
-leTourDeSimon = true
+
+    leTourDeSimon = true
     ordreDePassage.forEach((valeurDeLaCouleur, i) => {
         
-      console.log("Le tour de Simon = ",leTourDeSimon)
+     
         setTimeout(() => {
             if (valeurDeLaCouleur == 1) {
                 toucheRose.style.opacity = 0;
@@ -197,25 +201,34 @@ leTourDeSimon = true
 }
 
 // Une fonction qui compare les deux listes et nous renvoie si nous nous sommes trompé ou pas
-                 // Si on se trompe le jeu rejoue la mélodie
-                 // Sinon si nous avons bon nous passons au niveau suivant
+// Si on se trompe le jeu rejoue la mélodie
+// Sinon si nous avons bon nous passons au niveau suivant
 
 function comparaison(ordreDePassageJoueur) {
     ordreDePassageJoueur.forEach((laToucheDeCouleurDeSimon,placeDeLaCouleur) => {
         if(ordreDePassage[placeDeLaCouleur] == ordreDePassageJoueur[placeDeLaCouleur]) {
-            console.log("C'EST MOI  : ",ordreDePassageJoueur[placeDeLaCouleur])
+
         }
         else  {
-            console.log("IL REVIENS ICI")
-            console.log(ordreDePassageJoueur)
-            console.log(ordreDePassage)
-            setTimeout(nettoyage,500)
-            setTimeout(compositionDelaMusique,1500)
+            rate.play();
+            //Une message est envoyé quand nous ratons
+            mauvais.style.display = "block";
+            setTimeout('mauvais.style.display = "none"',600);
+            // Nous nettoyons puis nous relançons une nouvelle partie
+            setTimeout(nettoyage,500);
+            setTimeout(compositionDelaMusique,1500);
         }
     })
 if (ordreDePassage.length == ordreDePassageJoueur.length) {
-    good.play()
-    setTimeout(compositionDelaMusique(),15000)
+    good.play();
+    // On reprend la mélodie avec une valeurs de plus
+    setTimeout(compositionDelaMusique,2000);
+    // Un message est envoyé quand nous réuississons à passer le niveau
+    bon.style.display = "block";
+    setTimeout('bon.style.display = "none"',600);
+    
 }
 
 }
+
+
